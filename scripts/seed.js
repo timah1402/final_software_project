@@ -3,10 +3,7 @@ const bcrypt = require('bcrypt');
 const { getDb } = require('../src/db');
 const { createTables } = require('./schema');
 
-async function seed() {
-  const db = getDb();
-  createTables(db);
-
+async function seedDb(db) {
   // Membership plans
   db.prepare(`INSERT OR IGNORE INTO MEMBERSHIP_PLAN (name, duration_days, price) VALUES (?, ?, ?)`)
     .run('Monthly', 10000, 15000);
@@ -66,7 +63,7 @@ async function seed() {
   db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
     .run('Strength Training', d3.toISOString(), 15, 'Mike Johnson', admin.id);
 
-  // Bookings for past sessions (all 3 members attended Pilates, 2 attended Boxing)
+  // Bookings for past sessions
   const alice = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('alice@example.com');
   const bob   = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('bob@example.com');
   const carol = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('carol@example.com');
@@ -93,15 +90,25 @@ async function seed() {
     .run(pb4.lastInsertRowid, 'present');
   // pb5 (Bob, Boxing) left unmarked so you can test marking attendance live
 
-  // Sample bookings for upcoming sessions
+  // Bookings for upcoming sessions
   db.prepare(`INSERT OR IGNORE INTO BOOKING (member_id, session_id, status) VALUES (?, ?, ?)`)
     .run(alice.id, s1.lastInsertRowid, 'confirmed');
   db.prepare(`INSERT OR IGNORE INTO BOOKING (member_id, session_id, status) VALUES (?, ?, ?)`)
     .run(bob.id, s1.lastInsertRowid, 'confirmed');
 
   console.log('Database seeded successfully!');
-  console.log('  Admin login: admin@gym.com / admin123');
-  console.log('  Staff login: staff@gym.com / staff123');
 }
 
-seed().catch(err => { console.error(err); process.exit(1); });
+// Allow running directly: node scripts/seed.js
+if (require.main === module) {
+  const db = getDb();
+  createTables(db);
+  seedDb(db)
+    .then(() => {
+      console.log('  Admin login: admin@gym.com / admin123');
+      console.log('  Staff login: staff@gym.com / staff123');
+    })
+    .catch(err => { console.error(err); process.exit(1); });
+}
+
+module.exports = { seedDb };
