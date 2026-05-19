@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GymPro — Login</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="brand">Gym<span>Pro</span></div>
+        <p>Membership & Session Management</p>
+      </div>
+      <div id="error" class="alert alert-error hidden"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-control" id="email" type="email" placeholder="admin@gym.com" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input class="form-control" id="password" type="password" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    if (localStorage.getItem('gym_token')) window.location.href = '/dashboard.html';
+
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const errEl = document.getElementById('error');
+      errEl.classList.add('hidden');
+      try {
+        const data = await api.auth.login(
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        );
+        if (data.token) {
+          localStorage.setItem('gym_token', data.token);
+          localStorage.setItem('gym_staff', JSON.stringify(data.staff));
+          window.location.href = '/dashboard.html';
+        } else {
+          errEl.textContent = data.message || 'Invalid credentials';
+          errEl.classList.remove('hidden');
+        }
+      } catch {
+        errEl.textContent = 'Cannot reach server. Is it running on port 3000?';
+        errEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
