@@ -7,7 +7,7 @@ function initDb(dbPath) {
   const resolved =
     dbPath ||
     process.env.DB_PATH ||
-    (process.env.VERCEL ? '/tmp/gym.db' : path.join(__dirname, '../gym.db'));
+    ((process.env.VERCEL || process.env.RENDER) ? '/tmp/gym.db' : path.join(__dirname, '../gym.db'));
 
   db = new Database(resolved);
   db.pragma('journal_mode = WAL');
