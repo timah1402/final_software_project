@@ -35,7 +35,7 @@ function createPlan({ name = 'Monthly', duration_days = 30, price = 25.00 } = {}
   return require('../../src/models/membershipPlan.model').create({ name, duration_days, price });
 }
 
-function createMember({ name = 'Alice', email = 'alice@test.com', phone = null } = {}) {
+function createMember({ name = 'Fatou', email = 'fatou@test.com', phone = null } = {}) {
   return require('../../src/models/member.model').create({ name, email, phone });
 }
 

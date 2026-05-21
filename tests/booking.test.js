@@ -59,8 +59,8 @@ describe('Rule 3 – session capacity', () => {
   test('throws 409 when session is full', async () => {
     const fullSession = createFutureSession(staff.id, { capacity: 1 });
 
-    const member2 = createMember({ name: 'Bob', email: 'bob@test.com' });
-    const member3 = createMember({ name: 'Carol', email: 'carol@test.com' });
+    const member2 = createMember({ name: 'Moussa', email: 'moussa@test.com' });
+    const member3 = createMember({ name: 'Aminata', email: 'aminata@test.com' });
     createActiveMembership(member2.id, plan.id);
     createActiveMembership(member3.id, plan.id);
 

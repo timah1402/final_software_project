@@ -22,11 +22,11 @@ async function seedDb(db) {
 
   // Members
   db.prepare(`INSERT OR IGNORE INTO MEMBER (name, email, phone) VALUES (?, ?, ?)`)
-    .run('Alice Johnson', 'alice@example.com', '555-0001');
+    .run('Fatou Diallo', 'fatou@example.com', '555-0001');
   db.prepare(`INSERT OR IGNORE INTO MEMBER (name, email, phone) VALUES (?, ?, ?)`)
-    .run('Bob Smith', 'bob@example.com', '555-0002');
+    .run('Moussa Ndiaye', 'moussa@example.com', '555-0002');
   db.prepare(`INSERT OR IGNORE INTO MEMBER (name, email, phone) VALUES (?, ?, ?)`)
-    .run('Carol White', 'carol@example.com', '555-0003');
+    .run('Aminata Sarr', 'aminata@example.com', '555-0003');
 
   // Active memberships (monthly plan)
   const plan = db.prepare(`SELECT id FROM MEMBERSHIP_PLAN WHERE name = 'Monthly'`).get();
@@ -36,7 +36,7 @@ async function seedDb(db) {
   end.setDate(end.getDate() + 30);
   const endDate = end.toISOString().split('T')[0];
 
-  for (const email of ['alice@example.com', 'bob@example.com', 'carol@example.com']) {
+  for (const email of ['fatou@example.com', 'moussa@example.com', 'aminata@example.com']) {
     const member = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get(email);
     db.prepare(`INSERT OR IGNORE INTO MEMBERSHIP (member_id, plan_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?)`)
       .run(member.id, plan.id, startDate, endDate, 'active');
@@ -47,9 +47,9 @@ async function seedDb(db) {
   const p2 = new Date(today); p2.setDate(p2.getDate() - 2);
 
   const ps1 = db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
-    .run('Pilates (Past)', p1.toISOString(), 10, 'Jane Doe', admin.id);
+    .run('Pilates (Past)', p1.toISOString(), 10, 'Aissatou Fall', admin.id);
   const ps2 = db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
-    .run('Boxing (Past)', p2.toISOString(), 8, 'John Smith', admin.id);
+    .run('Boxing (Past)', p2.toISOString(), 8, 'Ibrahima Sow', admin.id);
 
   // Upcoming sessions
   const d1 = new Date(today); d1.setDate(d1.getDate() + 1);
@@ -57,16 +57,16 @@ async function seedDb(db) {
   const d3 = new Date(today); d3.setDate(d3.getDate() + 30);
 
   const s1 = db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
-    .run('Morning Yoga', d1.toISOString(), 10, 'Jane Doe', admin.id);
+    .run('Morning Yoga', d1.toISOString(), 10, 'Aissatou Fall', admin.id);
   const s2 = db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
-    .run('HIIT Cardio', d2.toISOString(), 5, 'John Smith', admin.id);
+    .run('HIIT Cardio', d2.toISOString(), 5, 'Ibrahima Sow', admin.id);
   db.prepare(`INSERT INTO SESSION (title, date_time, capacity, trainer, created_by) VALUES (?, ?, ?, ?, ?)`)
-    .run('Strength Training', d3.toISOString(), 15, 'Mike Johnson', admin.id);
+    .run('Strength Training', d3.toISOString(), 15, 'Cheikh Diop', admin.id);
 
   // Bookings for past sessions
-  const alice = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('alice@example.com');
-  const bob   = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('bob@example.com');
-  const carol = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('carol@example.com');
+  const alice = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('fatou@example.com');
+  const bob   = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('moussa@example.com');
+  const carol = db.prepare(`SELECT id FROM MEMBER WHERE email = ?`).get('aminata@example.com');
 
   const pb1 = db.prepare(`INSERT OR IGNORE INTO BOOKING (member_id, session_id, status) VALUES (?, ?, ?)`)
     .run(alice.id, ps1.lastInsertRowid, 'confirmed');
