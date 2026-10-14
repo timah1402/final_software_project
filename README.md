@@ -1,11 +1,14 @@
 # Gym Membership and Session Booking System
 
-A REST API built with Node.js, Express, and SQLite (better-sqlite3).
+A REST API for running a gym: members, membership plans, class sessions, bookings, attendance and reports, with JWT authentication and role-based access for staff and admins.
+
+🔗 **Live:** https://final-software-project.vercel.app
+
+**Tech stack:** Node.js · Express · SQLite (better-sqlite3) · JWT · bcrypt · express-validator · Jest · Supertest
 
 ## Setup
 
 ```bash
-cd gym-system
 npm install
 npm run seed       # initializes the DB schema and inserts sample data
 npm start          # starts the server on port 3000
@@ -144,3 +147,9 @@ Tests cover all 8 business rules using an in-memory SQLite database.
 6. Only staff/admin can create, edit, or delete sessions and plans.
 7. Membership renewal calculates end_date from today, not the original start_date.
 8. Attendance can only be recorded for sessions that have already occurred.
+
+---
+
+## Author
+
+Fatoumata Diouf — [@timah1402](https://github.com/timah1402)
